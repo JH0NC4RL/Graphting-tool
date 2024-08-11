@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Paper for Conic Sections</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .controls input {
+            margin: 0 5px;
+            padding: 5px;
+        }
+        .controls button {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="controls">
+    <label for="xCoord">X:</label>
+    <input type="number" id="xCoord" placeholder="X-coordinate">
+    <label for="yCoord">Y:</label>
+    <input type="number" id="yCoord" placeholder="Y-coordinate">
+    <button onclick="plotPoint()">Plot Point</button>
+</div>
+
+<canvas id="graphCanvas" width="800" height="800"></canvas>
+
+<script>
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const unit = 20; // Size of each grid square
+    const originX = width / 2;
+    const originY = height / 2;
+
+    function drawGrid() {
+        ctx.strokeStyle = '#ccc';
+        ctx.lineWidth = 0.5;
+
+        // Draw horizontal grid lines
+        for (let i = 0; i <= height; i += unit) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(width, i);
+            ctx.stroke();
+        }
+
+        // Draw vertical grid lines
+        for (let i = 0; i <= width; i += unit) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, height);
+            ctx.stroke();
+        }
+
+        // Draw X and Y axes
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1.5;
+
+        // Y axis
+        ctx.beginPath();
+        ctx.moveTo(originX, 0);
+        ctx.lineTo(originX, height);
+        ctx.stroke();
+
+        // X axis
+        ctx.beginPath();
+        ctx.moveTo(0, originY);
+        ctx.lineTo(width, originY);
+        ctx.stroke();
+    }
+
+    function plotPoint() {
+        const xInput = document.getElementById('xCoord').value;
+        const yInput = document.getElementById('yCoord').value;
+
+        if (xInput === '' || yInput === '') {
+            alert('Please enter both X and Y coordinates.');
+            return;
+        }
+
+        const x = parseInt(xInput, 10);
+        const y = parseInt(yInput, 10);
+
+        // Convert the coordinate to canvas position
+        const canvasX = originX + x * unit;
+        const canvasY = originY - y * unit;
+
+        ctx.fillStyle = '#ff0000';
+        ctx.beginPath();
+        ctx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    drawGrid();
+
+</body>
+</html>
